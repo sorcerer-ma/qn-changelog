@@ -1,5 +1,5 @@
 {
-  "name": "changelog",
+  "name": "qn-changelog",
   "version": "0.0.1",
   "description": "Tools for generate changelog",
   "main": "index.js",
@@ -13,6 +13,9 @@
   "keywords": [
     "changelog"
   ],
+  "bin": {
+    "qn-changelog": "./index.js"
+  },
   "author": "mayiqing",
   "license": "MIT",
   "bugs": {
@@ -21,6 +24,7 @@
   "homepage": "https://github.com/sorcerer-ma/changelog#readme",
   "typings": "typings/tsd.d.ts",
   "dependencies": {
-    "github": "^1.1.2"
+    "github": "^1.1.2",
+    "yargs": "^4.7.1"
   }
 }

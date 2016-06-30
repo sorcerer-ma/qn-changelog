@@ -10,6 +10,9 @@
     },
     "mocha/mocha.d.ts": {
       "commit": "e325b363f5ee9c72ebde49f1e783ae725f64b7e2"
+    },
+    "yargs/yargs.d.ts": {
+      "commit": "785cf6fe9922fb75d5e3b5c09821f44a10df7d8f"
     }
   }
 }

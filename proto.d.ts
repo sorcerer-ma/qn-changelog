@@ -1,4 +1,4 @@
-interface CommitsComparison {
+declare interface CommitsComparison {
   base_commit?: RepositoryCommit,
   merge_base_commit?: RepositoryCommit,
 
@@ -11,7 +11,7 @@ interface CommitsComparison {
   Files?: Array<CommitFile>,
 }
 
-interface RepositoryCommit {
+declare interface RepositoryCommit {
   sha?: string,
   commit?: Commit,
   author?: User,
@@ -24,7 +24,7 @@ interface RepositoryCommit {
   files?: Array<CommitFile>,
 }
 
-interface CommitFile {
+declare interface CommitFile {
   sha?: string,
   filename?: string,
   additions?: number,
@@ -34,7 +34,7 @@ interface CommitFile {
   patch?: string,
 }
 
-interface Commit {
+declare interface Commit {
   sha?: string,
   author?: CommitAuthor,
   committer?: CommitAuthor,
@@ -47,17 +47,78 @@ interface Commit {
   comment_count?: number,
 }
 
-interface CommitAuthor {
+declare interface CommitAuthor {
   date?: Date,
   name?: string,
   email?: string,
 }
 
-interface CommitStats {
+declare interface CommitStats {
   additions?: number,
   deletions?: number,
   total?: number,
 }
 
-// TODO
-type User = any
+declare interface User {
+  login?: string
+  // TODO: other properties
+}
+
+declare interface PullRequest {
+  number?: number,
+  state?: string,
+  title?: string,
+  body?: string,
+  created_at?: Date,
+  updated_at?: Date,
+  closed_at?: Date,
+  merged_at?: Date,
+  user?: User,
+  merged?: boolean,
+  mergeable?: boolean,
+  merged_by?: User,
+  comments?: number,
+  commits?: number,
+  additions?: number,
+  deletions?: number,
+  changed_files?: number,
+  url?: string,
+  html_url?: string,
+  issue_url?: string,
+  statuses_url?: string,
+  diff_url?: string,
+  patch_url?: string,
+  head?: PullRequestBranch,
+  base?: PullRequestBranch
+}
+
+declare interface PullRequestBranch {
+  label?: string,
+  ref?: string,
+  sha?: string,
+  repo?: Repository,
+  user?: User
+}
+
+declare type Repository = any
+
+interface Repos {
+  compareCommits(p: any, cb: Function): any
+}
+
+interface PullRequests {
+  get(p:any, cb:Function): any
+}
+
+declare class GitHubApi {
+  constructor(opt?: any)
+
+  authenticate(param: any): any
+
+  repos: Repos
+  pullRequests: PullRequests
+}
+
+declare module 'github' {
+  export = GitHubApi
+}
