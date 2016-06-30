@@ -21,7 +21,10 @@ class Changelog {
         return /^B\d{6}/.test(this.title);
     }
     isMasterToDevelop() {
-        return /master -> develop/i.test(this.title);
+        return /master\s*->\s*develop/i.test(this.title);
+    }
+    isDevelopToMaster() {
+        return /develop\s*->\s*master/i.test(this.title);
     }
 }
 exports.Changelog = Changelog;
@@ -37,6 +40,10 @@ function isNotMasterMergeIntoDevelop(c) {
     return !c.isMasterToDevelop();
 }
 exports.isNotMasterMergeIntoDevelop = isNotMasterMergeIntoDevelop;
+function isNotDevelopMergeIntoMaster(c) {
+    return !c.isDevelopToMaster();
+}
+exports.isNotDevelopMergeIntoMaster = isNotDevelopMergeIntoMaster;
 function showChangelog(c) {
     return c.show();
 }

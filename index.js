@@ -16,6 +16,10 @@ let argv = yargs
     alias: 'repo',
     describe: 'repo name'
 })
+    .options('t', {
+    alias: 'token',
+    describe: 'github access token, should specific when first run, it will be recorded into local config file: $HOME/.qn-changelog/config.json'
+})
     .options('a', {
     alias: 'all',
     describe: 'show all pull-request, not filter deploy pr'
@@ -55,7 +59,8 @@ function filterChangelog(changelogs) {
     }
     return changelogs
         .filter(changelog_1.isNotDeployChangelog)
-        .filter(changelog_1.isNotMasterMergeIntoDevelop);
+        .filter(changelog_1.isNotMasterMergeIntoDevelop)
+        .filter(changelog_1.isNotDevelopMergeIntoMaster);
 }
 function genChangelog() {
     return api_1.getCommits(user, repo, base, head)
@@ -74,14 +79,16 @@ function genChangelog() {
         .catch(_errorHandler);
 }
 function markdownChangelogs(changelogs) {
-    return changelogs
+    let s = changelogs
         .map((c) => { return c.toMarkdown(); })
         .reduce((ret, m) => {
         return ret += '\n- ' + m;
-    }, 'changelog:');
+    }, '');
+    return s ? `changelog:${s}` : 'no changelog';
 }
 function main() {
     initArgs();
+    api_1.init(argv.t);
     genChangelog()
         .then(markdownChangelogs)
         .then(console.log);

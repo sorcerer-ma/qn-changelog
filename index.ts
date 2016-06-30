@@ -8,12 +8,15 @@ import {
   newChangelog,
   showChangelog,
   isNotDeployChangelog,
-  isNotMasterMergeIntoDevelop
+  isNotMasterMergeIntoDevelop,
+  isNotDevelopMergeIntoMaster
 } from './libs/changelog'
 import {
+  init,
   getCommits,
   getPullRequest
 } from './libs/api'
+
 import yargs = require('yargs')
 
 let argv: any = yargs
@@ -28,6 +31,10 @@ let argv: any = yargs
   .options('r', {
     alias: 'repo',
     describe: 'repo name'
+  })
+  .options('t', {
+    alias: 'token',
+    describe: 'github access token, should specific when first run, it will be recorded into local config file: $HOME/.qn-changelog/config.json'
   })
   .options('a', {
     alias: 'all',
@@ -75,6 +82,7 @@ function filterChangelog(changelogs: Array<Changelog>): Array<Changelog> {
   return changelogs
     .filter(isNotDeployChangelog)
     .filter(isNotMasterMergeIntoDevelop)
+    .filter(isNotDevelopMergeIntoMaster)
 }
 
 function genChangelog(): Promise<any> {
@@ -95,15 +103,17 @@ function genChangelog(): Promise<any> {
 }
 
 function markdownChangelogs(changelogs: Array<Changelog>): string {
-  return changelogs
+  let s: string = changelogs
     .map((c) => { return c.toMarkdown() })
     .reduce((ret, m) => {
       return ret += '\n- ' + m
-    }, 'changelog:')
+    }, '')
+  return s ? `changelog:${s}` : 'no changelog'
 }
 
 function main(): void {
   initArgs()
+  init(argv.t)
   genChangelog()
     .then(markdownChangelogs)
     .then(console.log)

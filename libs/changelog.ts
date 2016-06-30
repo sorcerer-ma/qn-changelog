@@ -35,7 +35,11 @@ class Changelog {
   }
 
   isMasterToDevelop(): boolean {
-    return /master -> develop/i.test(this.title)
+    return /master\s*->\s*develop/i.test(this.title)
+  }
+
+  isDevelopToMaster(): boolean {
+    return /develop\s*->\s*master/i.test(this.title)
   }
 }
 
@@ -51,6 +55,10 @@ function isNotMasterMergeIntoDevelop(c: Changelog): boolean {
   return !c.isMasterToDevelop()
 }
 
+function isNotDevelopMergeIntoMaster(c: Changelog): boolean {
+  return !c.isDevelopToMaster()
+}
+
 function showChangelog(c: Changelog): string {
   return c.show()
 }
@@ -64,5 +72,6 @@ export {
   newChangelog,
   isNotDeployChangelog,
   isNotMasterMergeIntoDevelop,
+  isNotDevelopMergeIntoMaster,
   showChangelog
 }

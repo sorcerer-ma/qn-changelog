@@ -1,15 +1,62 @@
 'use strict'
 
+import fs = require('fs')
 import GitHubApi = require('github')
 
 var github = new GitHubApi()
 
-var token: string = process.env['GITHUB_TOKEN']
+function init(token?: string): void {
+  if (token) {
+    setToken(token)
+  } else {
+    token = getToken()
+  }
 
-github.authenticate({
-  type: 'oauth',
-  token: token
-})
+  if (token) {
+    github.authenticate({
+      type: 'oauth',
+      token: token
+    })
+  }
+}
+
+function setToken(token: string): void {
+  let configDirPath: string = `${process.env.HOME}/.qn-changelog`
+  let configFilePath: string = `${configDirPath}/config.json`
+
+  let config: Object = {
+    token: token
+  }
+
+  try {
+    fs.accessSync(configDirPath, fs.F_OK)
+  } catch (e) {
+    try {
+      fs.mkdirSync(configDirPath)
+    } catch (e) {
+      console.error('set token failed, error:', e)
+    }
+  }
+
+  try {
+    fs.writeFileSync(configFilePath, JSON.stringify(config, null, 2), 'utf-8')
+  } catch (e) {
+    console.error('set token failed, error:', e)
+  }
+}
+
+function getToken(): string {
+  let configFilePath: string = process.env.HOME + '/.qn-changelog/config.json'
+  try {
+    fs.accessSync(configFilePath, fs.F_OK)
+  } catch (e) {
+    return ''
+  }
+
+  let configStr: string = fs.readFileSync(configFilePath, 'utf-8')
+  let config = JSON.parse(configStr)
+  return config.token
+}
 
 function getCommits(user: string, repo: string, base: string, head: string): Promise<any> {
   return new Promise<any>((resolve, reject) => {
@@ -37,6 +84,7 @@ function getPullRequest(user: string, repo: string, prNumber: number): Promise<a
 }
 
 export {
+  init,
   getCommits,
   getPullRequest
 }
