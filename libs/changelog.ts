@@ -1,5 +1,7 @@
 'use strict'
 
+import moment = require('moment')
+
 import {
   getIssuesFromBody,
   formatJiraIssue
@@ -10,12 +12,14 @@ class Changelog {
   title: string
   issueUrls: Array<string>
   user: User
+  mergedAt: moment.Moment
 
   constructor(pr: PullRequest) {
     this.number = pr.number
     this.title = pr.title
     this.issueUrls = getIssuesFromBody(pr.body)
     this.user = pr.user
+    this.mergedAt = moment(pr.merged_at)
   }
 
   show(): string {

@@ -1,6 +1,6 @@
 {
   "name": "qn-changelog",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Tools for generate changelog",
   "main": "index.js",
   "scripts": {
@@ -25,6 +25,7 @@
   "typings": "typings/tsd.d.ts",
   "dependencies": {
     "github": "^1.1.2",
+    "moment": "^2.13.0",
     "yargs": "^4.7.1"
   }
 }

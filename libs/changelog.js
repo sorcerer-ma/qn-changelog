@@ -1,4 +1,5 @@
 'use strict';
+const moment = require('moment');
 const issues_1 = require('./issues');
 class Changelog {
     constructor(pr) {
@@ -6,6 +7,7 @@ class Changelog {
         this.title = pr.title;
         this.issueUrls = issues_1.getIssuesFromBody(pr.body);
         this.user = pr.user;
+        this.mergedAt = moment(pr.merged_at);
     }
     show() {
         var urls = this.issueUrls.join(',');

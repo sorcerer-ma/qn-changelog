@@ -2,6 +2,8 @@
 
 'use strict'
 
+import moment = require('moment');
+
 import { getIssuesFromBody } from './libs/issues'
 import {
   Changelog,
@@ -40,12 +42,11 @@ let argv: any = yargs
     alias: 'all',
     describe: 'show all pull-request, not filter deploy pr'
   })
-  .options('f', {
-    alias: 'from',
-    describe: 'time filter (coming soon)'
+  .options('before', {
+    describe: 'filter changelog before time'
   })
-  .options('config', {
-    describe: "edit config file"
+  .options('after', {
+    describe: 'filter changelog after time'
   })
   .help('h')
   .alias('h', 'help')
@@ -60,6 +61,12 @@ let user: string = 'qbox',
 function initArgs(): void {
   base = argv._[0]
   head = argv._[1]
+  if (argv.after && !moment(argv.after).isValid()) {
+    throw new TypeError('after is invalid time')
+  }
+  if (argv.before && !moment(argv.before).isValid()) {
+    throw new TypeError('before is invalid time')
+  }
 }
 
 function _errorHandler(err: Error): void {
@@ -85,6 +92,20 @@ function filterChangelog(changelogs: Array<Changelog>): Array<Changelog> {
     .filter(isNotDevelopMergeIntoMaster)
 }
 
+function filterTime(changelogs: Array<Changelog>): Array<Changelog> {
+  if (argv.after) {
+    changelogs = changelogs.filter((c: Changelog) => {
+      return c.mergedAt.isAfter(argv.after)
+    })
+  }
+  if (argv.before) {
+    changelogs = changelogs.filter((c: Changelog) => {
+      return c.mergedAt.isBefore(argv.before)
+    })
+  }
+  return changelogs
+}
+
 function genChangelog(): Promise<any> {
   return getCommits(user, repo, base, head)
     .then((res: CommitsComparison) => {
@@ -99,6 +120,7 @@ function genChangelog(): Promise<any> {
       return res.map<Changelog>(newChangelog)
     })
     .then(filterChangelog)
+    .then(filterTime)
     .catch(_errorHandler)
 }
 

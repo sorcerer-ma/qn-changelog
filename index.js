@@ -1,5 +1,6 @@
 #! /usr/bin/env node
 'use strict';
+const moment = require('moment');
 const changelog_1 = require('./libs/changelog');
 const api_1 = require('./libs/api');
 const yargs = require('yargs');
@@ -24,12 +25,11 @@ let argv = yargs
     alias: 'all',
     describe: 'show all pull-request, not filter deploy pr'
 })
-    .options('f', {
-    alias: 'from',
-    describe: 'time filter (coming soon)'
+    .options('before', {
+    describe: 'filter changelog before time'
 })
-    .options('config', {
-    describe: "edit config file"
+    .options('after', {
+    describe: 'filter changelog after time'
 })
     .help('h')
     .alias('h', 'help')
@@ -39,6 +39,12 @@ let user = 'qbox', repo = 'portal-v4', base = 'master', head = 'develop';
 function initArgs() {
     base = argv._[0];
     head = argv._[1];
+    if (argv.after && !moment(argv.after).isValid()) {
+        throw new TypeError('after is invalid time');
+    }
+    if (argv.before && !moment(argv.before).isValid()) {
+        throw new TypeError('before is invalid time');
+    }
 }
 function _errorHandler(err) {
     console.error(err.message);
@@ -62,6 +68,19 @@ function filterChangelog(changelogs) {
         .filter(changelog_1.isNotMasterMergeIntoDevelop)
         .filter(changelog_1.isNotDevelopMergeIntoMaster);
 }
+function filterTime(changelogs) {
+    if (argv.after) {
+        changelogs = changelogs.filter((c) => {
+            return c.mergedAt.isAfter(argv.after);
+        });
+    }
+    if (argv.before) {
+        changelogs = changelogs.filter((c) => {
+            return c.mergedAt.isBefore(argv.before);
+        });
+    }
+    return changelogs;
+}
 function genChangelog() {
     return api_1.getCommits(user, repo, base, head)
         .then((res) => {
@@ -76,6 +95,7 @@ function genChangelog() {
         return res.map(changelog_1.newChangelog);
     })
         .then(filterChangelog)
+        .then(filterTime)
         .catch(_errorHandler);
 }
 function markdownChangelogs(changelogs) {

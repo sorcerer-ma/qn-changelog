@@ -13,6 +13,12 @@
     },
     "yargs/yargs.d.ts": {
       "commit": "785cf6fe9922fb75d5e3b5c09821f44a10df7d8f"
+    },
+    "moment/moment.d.ts": {
+      "commit": "7fe39041b046ca302c76a7c9b8db8e909c66660b"
+    },
+    "moment/moment-node.d.ts": {
+      "commit": "b2d754f53fe0b0418625c5ee6023a18c5c46cb4d"
     }
   }
 }
