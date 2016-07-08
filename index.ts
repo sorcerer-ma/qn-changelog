@@ -127,10 +127,8 @@ function genChangelog(): Promise<any> {
 function markdownChangelogs(changelogs: Array<Changelog>): string {
   let s: string = changelogs
     .map((c) => { return c.toMarkdown() })
-    .reduce((ret, m) => {
-      return ret += '\n- ' + m
-    }, '')
-  return s ? `changelog:${s}` : 'no changelog'
+    .join('\n')
+  return s ? s : 'no changelog'
 }
 
 function main(): void {

@@ -17,7 +17,7 @@ class Changelog {
         let urlMarkdown = this.issueUrls.map((issue) => {
             return `[${issue}](${issues_1.formatJiraIssue(issue)})`;
         }).join(',');
-        return `[${urlMarkdown}] ${this.title} #${this.number} (@${this.user.login})`;
+        return `- [${urlMarkdown}] ${this.title} #${this.number} (@${this.user.login})`;
     }
     isDeployChangelog() {
         return /^B\d{6}/.test(this.title);

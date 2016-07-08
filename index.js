@@ -101,10 +101,8 @@ function genChangelog() {
 function markdownChangelogs(changelogs) {
     let s = changelogs
         .map((c) => { return c.toMarkdown(); })
-        .reduce((ret, m) => {
-        return ret += '\n- ' + m;
-    }, '');
-    return s ? `changelog:${s}` : 'no changelog';
+        .join('\n');
+    return s ? s : 'no changelog';
 }
 function main() {
     initArgs();
