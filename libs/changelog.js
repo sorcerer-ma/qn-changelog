@@ -5,19 +5,25 @@ class Changelog {
     constructor(pr) {
         this.number = pr.number;
         this.title = pr.title;
-        this.issueUrls = issues_1.getIssuesFromBody(pr.body);
+        this.issueNumbers = issues_1.getIssuesFromBody(pr.body);
         this.user = pr.user;
         this.mergedAt = moment(pr.merged_at);
     }
-    show() {
-        var urls = this.issueUrls.join(',');
-        return `[${urls}] ${this.title} #${this.number} (@${this.user.login})`;
+    toString() {
+        let issues = this.issueNumbers.join(',');
+        return `[${issues}] ${this.title} #${this.number} (@${this.user.login})`;
     }
     toMarkdown() {
-        let urlMarkdown = this.issueUrls.map((issue) => {
+        let urlMarkdown = this.issueNumbers.map((issue) => {
             return `[${issue}](${issues_1.formatJiraIssue(issue)})`;
         }).join(',');
         return `- [${urlMarkdown}] ${this.title} #${this.number} (@${this.user.login})`;
+    }
+    toHtml() {
+        let anchorEls = this.issueNumbers.map((issue) => {
+            return `<a href="${issues_1.formatJiraIssue(issue)}">${issue}</a>`;
+        }).join(', ');
+        return `<li>[${anchorEls}] ${this.title} #${this.number} (@${this.user.login})</li>`;
     }
     isDeployChangelog() {
         return /^B\d{6}/.test(this.title);
@@ -47,9 +53,6 @@ function isNotDevelopMergeIntoMaster(c) {
 }
 exports.isNotDevelopMergeIntoMaster = isNotDevelopMergeIntoMaster;
 function showChangelog(c) {
-    return c.show();
+    return c.toString();
 }
 exports.showChangelog = showChangelog;
-function markdownChangelog(c) {
-    return c.toMarkdown();
-}

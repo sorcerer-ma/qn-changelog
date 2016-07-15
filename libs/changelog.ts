@@ -10,28 +10,35 @@ import {
 class Changelog {
   number: number
   title: string
-  issueUrls: Array<string>
+  issueNumbers: Array<string>
   user: User
   mergedAt: moment.Moment
 
   constructor(pr: PullRequest) {
     this.number = pr.number
     this.title = pr.title
-    this.issueUrls = getIssuesFromBody(pr.body)
+    this.issueNumbers = getIssuesFromBody(pr.body)
     this.user = pr.user
     this.mergedAt = moment(pr.merged_at)
   }
 
-  show(): string {
-    var urls: string = this.issueUrls.join(',')
-    return `[${urls}] ${this.title} #${this.number} (@${this.user.login})`
+  toString(): string {
+    let issues: string = this.issueNumbers.join(',')
+    return `[${issues}] ${this.title} #${this.number} (@${this.user.login})`
   }
 
   toMarkdown(): string {
-    let urlMarkdown: string = this.issueUrls.map((issue: string) => {
+    let urlMarkdown: string = this.issueNumbers.map((issue: string) => {
       return `[${issue}](${formatJiraIssue(issue)})`
     }).join(',')
     return `- [${urlMarkdown}] ${this.title} #${this.number} (@${this.user.login})`
+  }
+
+  toHtml(): string {
+    let anchorEls: string = this.issueNumbers.map((issue: string) => {
+      return `<a href="${formatJiraIssue(issue)}">${issue}</a>`
+    }).join(', ')
+    return `<li>[${anchorEls}] ${this.title} #${this.number} (@${this.user.login})</li>`
   }
 
   isDeployChangelog(): boolean {
@@ -64,11 +71,7 @@ function isNotDevelopMergeIntoMaster(c: Changelog): boolean {
 }
 
 function showChangelog(c: Changelog): string {
-  return c.show()
-}
-
-function markdownChangelog(c: Changelog): string {
-  return c.toMarkdown()
+  return c.toString()
 }
 
 export {

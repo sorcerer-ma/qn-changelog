@@ -2,6 +2,7 @@
 'use strict';
 const moment = require('moment');
 const changelog_1 = require('./libs/changelog');
+const formatter = require('./libs/format');
 const api_1 = require('./libs/api');
 const yargs = require('yargs');
 let argv = yargs
@@ -30,6 +31,12 @@ let argv = yargs
 })
     .options('after', {
     describe: 'filter changelog after time'
+})
+    .options('f', {
+    alias: 'format',
+    describe: 'result format',
+    choices: ['html', 'markdown'],
+    default: 'markdown'
 })
     .help('h')
     .alias('h', 'help')
@@ -98,17 +105,22 @@ function genChangelog() {
         .then(filterTime)
         .catch(_errorHandler);
 }
-function markdownChangelogs(changelogs) {
-    let s = changelogs
-        .map((c) => { return c.toMarkdown(); })
-        .join('\n');
-    return s ? s : 'no changelog';
-}
 function main() {
     initArgs();
     api_1.init(argv.t);
+    let format;
+    if (argv.format) {
+        switch (argv.format) {
+            case 'html':
+                format = formatter.toHtml;
+                break;
+            default:
+                format = formatter.toMarkdown;
+                break;
+        }
+    }
     genChangelog()
-        .then(markdownChangelogs)
+        .then(format)
         .then(console.log);
 }
 main();

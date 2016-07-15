@@ -8,11 +8,11 @@ import { getIssuesFromBody } from './libs/issues'
 import {
   Changelog,
   newChangelog,
-  showChangelog,
   isNotDeployChangelog,
   isNotMasterMergeIntoDevelop,
   isNotDevelopMergeIntoMaster
 } from './libs/changelog'
+import * as formatter from './libs/format'
 import {
   init,
   getCommits,
@@ -47,6 +47,12 @@ let argv: any = yargs
   })
   .options('after', {
     describe: 'filter changelog after time'
+  })
+  .options('f', {
+    alias: 'format',
+    describe: 'result format',
+    choices: ['html', 'markdown'],
+    default: 'markdown'
   })
   .help('h')
   .alias('h', 'help')
@@ -124,18 +130,26 @@ function genChangelog(): Promise<any> {
     .catch(_errorHandler)
 }
 
-function markdownChangelogs(changelogs: Array<Changelog>): string {
-  let s: string = changelogs
-    .map((c) => { return c.toMarkdown() })
-    .join('\n')
-  return s ? s : 'no changelog'
-}
-
 function main(): void {
   initArgs()
   init(argv.t)
+
+  let format: formatter.ChangelogsFormatter
+
+  if (argv.format) {
+    switch (argv.format) {
+      case 'html':
+        format = formatter.toHtml
+        break;
+
+      default:
+        format = formatter.toMarkdown
+        break;
+    }
+  }
+
   genChangelog()
-    .then(markdownChangelogs)
+    .then(format)
     .then(console.log)
 }
 
