@@ -52,6 +52,8 @@ function initArgs() {
     if (argv.before && !moment(argv.before).isValid()) {
         throw new TypeError('before is invalid time');
     }
+    repo = argv.repo ? argv.repo : 'portal-v4';
+    user = argv.user ? argv.user : 'qbox';
 }
 function _errorHandler(err) {
     console.error(err.message);
@@ -109,15 +111,11 @@ function main() {
     initArgs();
     api_1.init(argv.t);
     let format;
-    if (argv.format) {
-        switch (argv.format) {
-            case 'html':
-                format = formatter.toHtml;
-                break;
-            default:
-                format = formatter.toMarkdown;
-                break;
-        }
+    if (argv.format === 'html') {
+        format = formatter.toHtml;
+    }
+    else {
+        format = formatter.toMarkdown;
     }
     genChangelog()
         .then(format)
