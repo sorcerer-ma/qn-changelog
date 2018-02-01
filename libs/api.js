@@ -1,6 +1,7 @@
 'use strict';
-const fs = require('fs');
-const GitHubApi = require('github');
+Object.defineProperty(exports, "__esModule", { value: true });
+const fs = require("fs");
+const GitHubApi = require("github");
 var github = new GitHubApi();
 function init(token) {
     if (token) {
@@ -24,7 +25,7 @@ function setToken(token) {
         token: token
     };
     try {
-        fs.accessSync(configDirPath, fs.F_OK);
+        fs.accessSync(configDirPath, fs.constants.F_OK);
     }
     catch (e) {
         try {
@@ -44,7 +45,7 @@ function setToken(token) {
 function getToken() {
     let configFilePath = process.env.HOME + '/.qn-changelog/config.json';
     try {
-        fs.accessSync(configFilePath, fs.F_OK);
+        fs.accessSync(configFilePath, fs.constants.F_OK);
     }
     catch (e) {
         return '';
