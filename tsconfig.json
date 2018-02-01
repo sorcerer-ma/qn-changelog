@@ -16,6 +16,5 @@
   "files": [
     "index.ts",
     "proto.d.ts",
-    "typings/tsd.d.ts"
   ]
 }

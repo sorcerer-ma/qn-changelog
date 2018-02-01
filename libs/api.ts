@@ -1,6 +1,6 @@
 'use strict'
 
-import fs = require('fs')
+import * as fs from 'fs'
 import GitHubApi = require('github')
 
 var github = new GitHubApi()
@@ -29,7 +29,7 @@ function setToken(token: string): void {
   }
 
   try {
-    fs.accessSync(configDirPath, fs.F_OK)
+    fs.accessSync(configDirPath, fs.constants.F_OK)
   } catch (e) {
     try {
       fs.mkdirSync(configDirPath)
@@ -48,7 +48,7 @@ function setToken(token: string): void {
 function getToken(): string {
   let configFilePath: string = process.env.HOME + '/.qn-changelog/config.json'
   try {
-    fs.accessSync(configFilePath, fs.F_OK)
+    fs.accessSync(configFilePath, fs.constants.F_OK)
   } catch (e) {
     return ''
   }

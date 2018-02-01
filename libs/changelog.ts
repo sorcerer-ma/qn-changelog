@@ -4,6 +4,7 @@ import moment = require('moment')
 
 import {
   getIssuesFromBody,
+  getIssuesFromTitle,
   formatJiraIssue
 } from './issues'
 
@@ -17,7 +18,11 @@ class Changelog {
   constructor(pr: PullRequest) {
     this.number = pr.number
     this.title = pr.title
-    this.issueNumbers = getIssuesFromBody(pr.body)
+    let issueNumbers = getIssuesFromTitle(pr.title)
+    if (issueNumbers.length == 0) {
+      issueNumbers = getIssuesFromBody(pr.body)
+    }
+    this.issueNumbers = issueNumbers
     this.user = pr.user
     this.mergedAt = moment(pr.merged_at)
   }

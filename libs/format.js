@@ -1,4 +1,5 @@
 'use strict';
+Object.defineProperty(exports, "__esModule", { value: true });
 function toString(changelogs) {
     let s = changelogs
         .map((c) => { return c.toString(); })

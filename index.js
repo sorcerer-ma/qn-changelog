@@ -1,10 +1,11 @@
 #! /usr/bin/env node
 'use strict';
-const moment = require('moment');
-const changelog_1 = require('./libs/changelog');
-const formatter = require('./libs/format');
-const api_1 = require('./libs/api');
-const yargs = require('yargs');
+Object.defineProperty(exports, "__esModule", { value: true });
+const moment = require("moment");
+const changelog_1 = require("./libs/changelog");
+const formatter = require("./libs/format");
+const api_1 = require("./libs/api");
+const yargs = require("yargs");
 let argv = yargs
     .usage('Usage: changelog <base> <head> [options]\n\n<base> and <head> can be branch name or tag or commit hash')
     .demand(2)

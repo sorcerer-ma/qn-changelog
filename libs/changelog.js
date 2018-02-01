@@ -1,11 +1,16 @@
 'use strict';
-const moment = require('moment');
-const issues_1 = require('./issues');
+Object.defineProperty(exports, "__esModule", { value: true });
+const moment = require("moment");
+const issues_1 = require("./issues");
 class Changelog {
     constructor(pr) {
         this.number = pr.number;
         this.title = pr.title;
-        this.issueNumbers = issues_1.getIssuesFromBody(pr.body);
+        let issueNumbers = issues_1.getIssuesFromTitle(pr.title);
+        if (issueNumbers.length == 0) {
+            issueNumbers = issues_1.getIssuesFromBody(pr.body);
+        }
+        this.issueNumbers = issueNumbers;
         this.user = pr.user;
         this.mergedAt = moment(pr.merged_at);
     }

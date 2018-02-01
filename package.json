@@ -24,8 +24,12 @@
   "homepage": "https://github.com/sorcerer-ma/changelog#readme",
   "typings": "typings/tsd.d.ts",
   "dependencies": {
+    "@types/node": "^9.4.0",
     "github": "^1.1.2",
     "moment": "^2.13.0",
     "yargs": "^4.7.1"
+  },
+  "devDependencies": {
+    "@types/yargs": "^10.0.1"
   }
 }
