@@ -1,6 +1,6 @@
 {
   "name": "qn-changelog",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Tools for generate changelog",
   "main": "index.js",
   "scripts": {
@@ -24,9 +24,11 @@
   "homepage": "https://github.com/sorcerer-ma/changelog#readme",
   "typings": "typings/tsd.d.ts",
   "dependencies": {
-    "@types/node": "^9.4.0",
-    "github": "^1.1.2",
+    "@octokit/rest": "^16.28.9",
+    "@types/node": "^9.6.51",
     "moment": "^2.13.0",
+    "qn-changelog": "^0.1.1",
+    "typescript": "^3.6.2",
     "yargs": "^4.7.1"
   },
   "devDependencies": {

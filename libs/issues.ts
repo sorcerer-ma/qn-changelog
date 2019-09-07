@@ -2,7 +2,7 @@
 
 const redmineIssueReg: RegExp = /issues\/(\d+)/g,
   jiraIssueReg: RegExp = /browse\/([a-zA-Z0-9-]+)/g,
-  jiraPRTitleIssueReg: RegExp = /[A-Za-z0-9]+-\d+/g,
+  jiraPRTitleIssueReg: RegExp = /[A-Za-z][A-Za-z0-9]*-\d+/g,
   githubIssuesReg: RegExp = /#(\d+)/g
 
 export function getIssuesFromBody(prBody: string): Array<string> {

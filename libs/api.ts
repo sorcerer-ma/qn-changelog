@@ -1,7 +1,7 @@
 'use strict'
 
 import * as fs from 'fs'
-import GitHubApi = require('github')
+import GitHubApi = require('@octokit/rest')
 
 var github = new GitHubApi()
 
@@ -13,9 +13,8 @@ function init(token?: string): void {
   }
 
   if (token) {
-    github.authenticate({
-      type: 'oauth',
-      token: token
+    github = new GitHubApi({
+      auth: token
     })
   }
 }
@@ -61,24 +60,28 @@ function getToken(): string {
 function getCommits(user: string, repo: string, base: string, head: string): Promise<any> {
   return new Promise<any>((resolve, reject) => {
     github.repos.compareCommits({
-      user: user,
+      owner: user,
       repo: repo,
       base: base,
       head: head
-    }, (err: Error, res: CommitsComparison) => {
-      err ? reject(err) : resolve(res)
+    }).then((res) => {
+      resolve(res.data)
+    }).catch((err) => {
+      console.error(err)
     })
   })
 }
 
 function getPullRequest(user: string, repo: string, prNumber: number): Promise<any> {
   return new Promise<any>((resolve, reject) => {
-    github.pullRequests.get({
-      user: user,
+    github.pulls.get({
+      owner: user,
       repo: repo,
-      number: prNumber
-    }, (err: Error, res: PullRequest) => {
-      err ? reject(err) : resolve(res)
+      pull_number: prNumber
+    }).then((res) => {
+      resolve(res.data)
+    }).catch((err) => {
+      console.error(err)
     })
   })
 }

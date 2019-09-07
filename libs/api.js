@@ -1,7 +1,7 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs = require("fs");
-const GitHubApi = require("github");
+const GitHubApi = require("@octokit/rest");
 var github = new GitHubApi();
 function init(token) {
     if (token) {
@@ -11,9 +11,8 @@ function init(token) {
         token = getToken();
     }
     if (token) {
-        github.authenticate({
-            type: 'oauth',
-            token: token
+        github = new GitHubApi({
+            auth: token
         });
     }
 }
@@ -57,24 +56,28 @@ function getToken() {
 function getCommits(user, repo, base, head) {
     return new Promise((resolve, reject) => {
         github.repos.compareCommits({
-            user: user,
+            owner: user,
             repo: repo,
             base: base,
             head: head
-        }, (err, res) => {
-            err ? reject(err) : resolve(res);
+        }).then((res) => {
+            resolve(res.data);
+        }).catch((err) => {
+            console.error(err);
         });
     });
 }
 exports.getCommits = getCommits;
 function getPullRequest(user, repo, prNumber) {
     return new Promise((resolve, reject) => {
-        github.pullRequests.get({
-            user: user,
+        github.pulls.get({
+            owner: user,
             repo: repo,
-            number: prNumber
-        }, (err, res) => {
-            err ? reject(err) : resolve(res);
+            pull_number: prNumber
+        }).then((res) => {
+            resolve(res.data);
+        }).catch((err) => {
+            console.error(err);
         });
     });
 }

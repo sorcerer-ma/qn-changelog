@@ -11,7 +11,11 @@
     "suppressImplicitAnyIndexErrors": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "noEmitHelpers": true
+    "noEmitHelpers": true,
+    "lib": [
+      "esnext",
+      "esnext.asynciterable"
+    ]
   },
   "files": [
     "index.ts",
