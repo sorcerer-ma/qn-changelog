@@ -1,37 +1,36 @@
 {
   "name": "qn-changelog",
-  "version": "0.2.1",
-  "description": "Tools for generate changelog",
-  "main": "index.js",
+  "version": "0.2.2",
+  "description": "A tool designed to generate the release changelog for Qiniu.",
+  "main": "dist/index.js",
+  "bin": {
+    "qn-changelog": "dist/index.js"
+  },
   "scripts": {
+    "build": "npx tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sorcerer-ma/changelog.git"
+    "url": "git+https://github.com/sorcerer-ma/qn-changelog.git"
   },
   "keywords": [
-    "changelog"
+    "qn-changelog"
   ],
-  "bin": {
-    "qn-changelog": "./index.js"
-  },
   "author": "mayiqing",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/sorcerer-ma/changelog/issues"
+    "url": "https://github.com/sorcerer-ma/qn-changelog/issues"
   },
-  "homepage": "https://github.com/sorcerer-ma/changelog#readme",
-  "typings": "typings/tsd.d.ts",
-  "dependencies": {
-    "@octokit/rest": "^16.28.9",
-    "@types/node": "^9.6.51",
-    "moment": "^2.13.0",
-    "qn-changelog": "^0.1.1",
-    "typescript": "^3.6.2",
-    "yargs": "^4.7.1"
-  },
+  "homepage": "https://github.com/sorcerer-ma/qn-changelog#readme",
   "devDependencies": {
-    "@types/yargs": "^10.0.1"
+    "@types/node-fetch": "^2.6.6",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "commander": "^11.1.0",
+    "moment": "^2.29.4",
+    "node-fetch": "^2.7.0",
+    "octokit": "^3.1.1"
   }
 }

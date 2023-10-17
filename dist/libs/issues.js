@@ -1,5 +1,6 @@
-'use strict';
+"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.formatJiraIssue = exports.getIssuesFromTitle = exports.getIssuesFromBody = void 0;
 const redmineIssueReg = /issues\/(\d+)/g, jiraIssueReg = /browse\/([a-zA-Z0-9-]+)/g, jiraPRTitleIssueReg = /[A-Za-z][A-Za-z0-9]*-\d+/g, githubIssuesReg = /#(\d+)/g;
 function getIssuesFromBody(prBody) {
     var matched;

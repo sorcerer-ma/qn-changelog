@@ -1,18 +1,22 @@
-'use strict';
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const moment = require("moment");
+exports.showChangelog = exports.isNotDevelopMergeIntoMaster = exports.isNotMasterMergeIntoDevelop = exports.isNotDeployChangelog = exports.newChangelog = exports.Changelog = void 0;
+const moment_1 = __importDefault(require("moment"));
 const issues_1 = require("./issues");
 class Changelog {
     constructor(pr) {
         this.number = pr.number;
         this.title = pr.title;
-        let issueNumbers = issues_1.getIssuesFromTitle(pr.title);
+        let issueNumbers = (0, issues_1.getIssuesFromTitle)(pr.title);
         if (issueNumbers.length == 0) {
-            issueNumbers = issues_1.getIssuesFromBody(pr.body);
+            issueNumbers = (0, issues_1.getIssuesFromBody)(pr.body);
         }
         this.issueNumbers = issueNumbers;
         this.user = pr.user;
-        this.mergedAt = moment(pr.merged_at);
+        this.mergedAt = (0, moment_1.default)(pr.merged_at);
     }
     toString() {
         let issues = this.issueNumbers.join(',');
@@ -20,13 +24,13 @@ class Changelog {
     }
     toMarkdown() {
         let urlMarkdown = this.issueNumbers.map((issue) => {
-            return `[${issue}](${issues_1.formatJiraIssue(issue)})`;
+            return `[${issue}](${(0, issues_1.formatJiraIssue)(issue)})`;
         }).join(',');
         return `- [${urlMarkdown}] ${this.title} #${this.number} (@${this.user.login})`;
     }
     toHtml() {
         let anchorEls = this.issueNumbers.map((issue) => {
-            return `<a href="${issues_1.formatJiraIssue(issue)}">${issue}</a>`;
+            return `<a href="${(0, issues_1.formatJiraIssue)(issue)}">${issue}</a>`;
         }).join(', ');
         return `<li>[${anchorEls}] ${this.title} #${this.number} (@${this.user.login})</li>`;
     }

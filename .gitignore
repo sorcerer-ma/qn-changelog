@@ -42,6 +42,5 @@ jspm_packages
 
 # Created by https://www.gitignore.io/api/typings
 
-### Typings ###
-## Ignore downloaded typings
-typings
+# TypeScript cache
+*.tsbuildinfo\
