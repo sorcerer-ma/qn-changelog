@@ -34,7 +34,7 @@ const formatter = __importStar(require("./libs/format"));
 const api_1 = require("./libs/api");
 const program = new commander_1.Command();
 program.name('qn-changelog')
-    .description('Tools for generate changelog')
+    .description('A tool designed to generate the release changelog for Qiniu.')
     .version('0.2.2');
 program.argument('<base>', 'base and head can be branch name or tag or commit hash')
     .argument('<head>', 'base and head can be branch name or tag or commit hash');
